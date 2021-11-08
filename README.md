@@ -11,7 +11,7 @@ pip install opencv-python
 若已有，则可以进入下一步操作。
 
 ### 使用指南：
-将文件夹中的Oreo_images文件夹放置于Hoshino的资源文件夹/Resources/img/下（取决于你资源文件夹放了哪）
+将文件夹中的Oreo_images文件夹放置于Hoshino的资源文件夹\Resources\img\下（取决于你资源文件夹放了哪）
 
 然后和其它模块类似，在 HoshinoBot\hoshino\config\_bot_.py 文件的 MODULES_ON 下加入Oreo，之后重启 HoshinoBot即可。
 
