@@ -6,8 +6,8 @@ import hoshino
 from hoshino import R, Service, priv, util
 from hoshino.typing import CQEvent
 
-img_path = os.path.join(os.path.dirname(__file__), "Oreo_images")
-img_path = img_path.replace('\\', '/') + '/'
+img_path = os.path.join(os.path.dirname(__file__), "Oreo_images/")
+img_path = img_path.replace('\\', '/')
 
 sv = Service('oreo', visible=True, manage_priv=priv.ADMIN, enable_on_default=True)
 
