@@ -6,7 +6,8 @@ import hoshino
 from hoshino import R, Service, priv, util
 from hoshino.typing import CQEvent
 
-img_path = str('C:/Resources/img/Oreo_images/')
+img_path = os.path.join(os.path.dirname(__file__), "Oreo_images")
+img_path = img_path.replace('\\', '/') + '/'
 
 sv = Service('oreo', visible=True, manage_priv=priv.ADMIN, enable_on_default=True)
 
@@ -127,4 +128,4 @@ async def draworeo(bot, ev):
         img4 = add_re(img4)
     cv2.imwrite(img_path + 'oreo.png', img4)  # 将最终图像保存为oreo.png
     
-    await bot.send(ev, R.img(f"Oreo_images/oreo.png").cqcode, at_sender=True)
+    await bot.send(ev, r'[CQ:image,file=file:///' + img_path + 'oreo.png' + r']', at_sender=True)
