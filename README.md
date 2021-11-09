@@ -22,4 +22,4 @@ draw奥利奥
 draw后面可以为奥和利任意的排列组合。
 
 ## 效果演示:
-![效果演示]()
+![效果演示](https://github.com/C-Jun-GIT/Oreo/blob/main/%E5%A5%A5%E5%88%A9%E5%A5%A5%E7%A4%BA%E4%BE%8B.png)
