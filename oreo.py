@@ -26,6 +26,7 @@ def init():  # 将加载本地图片作为函数封装起来，以便后续作�
     imge2 = cv2.resize(imge2_temp, (width, height), interpolation=cv2.INTER_AREA)
     return imge1, imge2, imge3, imge_empty  # 将上半饼，缩小的馅，下半饼以及空白画布作为对象返回
 
+img1, img2, img3, img_empty = init()
 
 #  画布增加（为了让图片能叠加，和ps一个道理）
 def png_extend(img, px):
@@ -40,7 +41,6 @@ def png_extend(img, px):
 
 
 def add_t(imgb):  # 增加上半饼，只在要叠加最上面一层的时候使用
-    img1, _, _, _ = init()  # 初始化本地图片
     roi = imgb[0:410, 0:600]  # 设置要叠加的区域
 
     # 下面的步骤为opencv中教科书般的“按位运算”操作，和百度能找到的教程几乎一样
@@ -59,7 +59,6 @@ def add_t(imgb):  # 增加上半饼，只在要叠加最上面一层的时候使
 
 
 def add_re(imgb):  # 注释同函数add_t
-    _, img2, _, _ = init()
     roi = imgb[0:369, 30:570]
     regray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
     _, mask = cv2.threshold(regray, 253, 255, cv2.THRESH_BINARY)
@@ -72,7 +71,6 @@ def add_re(imgb):  # 注释同函数add_t
 
 
 def add_b(imgb):  # 注释同函数add_t
-    _, _, img3, _ = init()
     roi = imgb[0:410, 0:600]
     img1gray = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
     _, mask = cv2.threshold(img1gray, 253, 255, cv2.THRESH_BINARY)
@@ -94,8 +92,7 @@ def image_to_base64(image_cv2):
 async def draworeo(bot, ev):
     name = ev.message.extract_plain_text().strip()
     # 预处理
-    _, _, img3, img_empty = init()
-    img4 = img3 if name[-1] == "奥" else add_re(img_empty)
+    img4 = img3.clone() if name[-1] == "奥" else add_re(img_empty.clone())
 
     # 对除去顶层以外的部分进行叠图（因为顶层有可能要叠上半饼，所以后续拉出来单独处理）
     for i in range(0, len(name) - 2):
