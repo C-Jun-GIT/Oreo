@@ -15,9 +15,7 @@ pip install opencv-python
 
 或者也可以使用git指令拉取(以windows为例)：
 
-在Hoshino的HoshinoBot\hoshino\modules文件夹下打开Windows PowerShell(左上角点击“文件”，在下拉菜单中寻找)，
-
-并输入以下指令：
+在Hoshino的HoshinoBot\hoshino\modules文件夹下打开Windows PowerShell(左上角点击“文件”，在下拉菜单中寻找)，并输入以下指令：
 ```
 git clone https://github.com/C-Jun-GIT/Oreo.git
 ```
