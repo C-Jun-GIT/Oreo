@@ -11,9 +11,18 @@ pip install opencv-python
 若已有，则可以进入下一步操作。
 
 ## 使用指南：
-将文件夹放置于Hoshino的HoshinoBot\hoshino\modules文件夹下，重命名为Oreo
+将文件夹放置于Hoshino的HoshinoBot\hoshino\modules文件夹下，重命名为Oreo。
 
-之后与其它模块类似，在 HoshinoBot\hoshino\config\_bot_.py 文件的 MODULES_ON 下加入Oreo，之后重启 HoshinoBot即可。
+或者也可以使用git指令拉取(以windows为例)：
+
+在Hoshino的HoshinoBot\hoshino\modules文件夹下打开Windows PowerShell(左上角点击“文件”，在下拉菜单中寻找)，
+
+并输入以下指令：
+```
+git clone https://github.com/C-Jun-GIT/Oreo.git
+```
+
+之后与其它模块类似，在 HoshinoBot\hoshino\config\_bot_.py 文件的 MODULES_ON 下加入Oreo，之后重启 HoshinoBot即可完成配置。
 
 指令为(例)：
 ```
