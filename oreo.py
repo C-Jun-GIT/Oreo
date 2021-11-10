@@ -92,7 +92,7 @@ def image_to_base64(image_cv2):
 async def draworeo(bot, ev):
     name = ev.message.extract_plain_text().strip()
     # 预处理
-    img4 = img3.clone() if name[-1] == "奥" else add_re(img_empty.clone())
+    img4 = img3.copy() if name[-1] == "奥" else add_re(img_empty.copy())
 
     # 对除去顶层以外的部分进行叠图（因为顶层有可能要叠上半饼，所以后续拉出来单独处理）
     for i in range(0, len(name) - 2):
