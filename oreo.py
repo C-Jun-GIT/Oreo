@@ -1,14 +1,23 @@
 import cv2
 import os
 import base64
-
-from hoshino import Service, priv
+import re
+from hoshino import Service
 from hoshino.typing import MessageSegment
 
 img_path = os.path.join(os.path.dirname(__file__), "Oreo_images/")
 img_path = img_path.replace("\\", "/")
 
-sv = Service("oreo", visible=True, manage_priv=priv.ADMIN, enable_on_default=True)
+sv_help = """
+[奥(o)利(re)奥(o)……] 生成奥利奥叠罗汉，后续可以是奥利奥的随意组合
+""".strip()
+
+sv = Service(
+    name="奥利奥",
+    visible=True,
+    enable_on_default=True,
+    help_=sv_help
+)
 
 
 def init():  # 将加载本地图片作为函数封装起来，以便后续作为模块使用
@@ -26,7 +35,9 @@ def init():  # 将加载本地图片作为函数封装起来，以便后续作�
     imge2 = cv2.resize(imge2_temp, (width, height), interpolation=cv2.INTER_AREA)
     return imge1, imge2, imge3, imge_empty  # 将上半饼，缩小的馅，下半饼以及空白画布作为对象返回
 
+
 img1, img2, img3, img_empty = init()
+
 
 #  画布增加（为了让图片能叠加，和ps一个道理）
 def png_extend(img, px):
@@ -88,43 +99,58 @@ def image_to_base64(image_cv2):
     return "base64://" + image_code
 
 
-@sv.on_prefix("draw")
+# @sv.on_prefix("Oreo")
+# 改用正则表达式让这个功能更好玩，无需命令前缀，无视大小写
+# @sv.on_rex(r"(?i)^((奥|利|o|re)+)?$")
+# 下面这个加入了奥=a，利=l（也就是拼音首字母），按需开启，函数内正则表达式已支持识别无需改动
+@sv.on_rex(r"(?i)^((奥|利|o|re|a|l)+)?$")
 async def draworeo(bot, ev):
     name = ev.message.extract_plain_text().strip()
     # 预处理
-    img4 = img3.copy() if name[-1] == "奥" else add_re(img_empty.copy())
+    if re.match(r"(?i)[奥o]", name[-1]):
+        img4 = img3.copy()
+    else:
+        img4 = add_re(img_empty.copy())
+    # 因为采用单独校验单个字符的原因，输入re的时候会同时尝试识别r和e，所以去除e
+    # 实际影响仅在第一二层，因为后续层e是无法完成正则识别的
+    # 尽管如此，去除e更简单粗暴
+    name = name.replace("e", "")
 
     # 对除去顶层以外的部分进行叠图（因为顶层有可能要叠上半饼，所以后续拉出来单独处理）
     for i in range(0, len(name) - 2):
-        if (name[len(name) - i - 1] == "奥") & (name[len(name) - i - 2] == "利"):
+        first = name[len(name) - i - 1]
+        last = name[len(name) - i - 2]
+        if re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[利rl]", last):
             """底+馅要拓展40像素"""
             imgt = png_extend(img4, 40)
             img4 = add_re(imgt)
-        elif (name[len(name) - i - 1] == "利") & (name[len(name) - i - 2] == "利"):
+        elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[利rl]", last):
             """馅+馅要拓展60像素"""
             img4 = png_extend(img4, 60)
             img4 = add_re(img4)
-        elif (name[len(name) - i - 1] == "利") & (name[len(name) - i - 2] == "奥"):
+        elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[奥oa]", last):
             """馅+底/顶要拓展84像素"""
             img4 = png_extend(img4, 84)
             img4 = add_b(img4)
-        elif (name[len(name) - i - 1] == "奥") & (name[len(name) - i - 2] == "奥"):
+        elif re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[奥oa]", last):
             """底+底/顶要拓展64像素"""
             img4 = png_extend(img4, 64)
             img4 = add_b(img4)
 
     # 对顶层单独处理
-    if (name[0] == "奥") & (name[1] == "利"):
+    first = name[0]
+    last = name[1]
+    if re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[利rl]", last):
         img4 = png_extend(img4, 84)
         img4 = add_t(img4)
-    elif (name[0] == "奥") & (name[1] == "奥"):
+    elif re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[奥oa]", last):
         img4 = png_extend(img4, 64)
         img4 = add_t(img4)
-    elif (name[0] == "利") & (name[1] == "奥"):
+    elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[奥oa]", last):
         imgt = png_extend(img4, 40)
         img4 = add_re(imgt)
-    elif (name[0] == "利") & (name[1] == "利"):
+    elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[利rl]", last):
         img4 = png_extend(img4, 60)
         img4 = add_re(img4)
 
-    await bot.send(ev, MessageSegment.image(image_to_base64(img4)), at_sender=True)
+    await bot.send(ev, MessageSegment.image(image_to_base64(img4)))
