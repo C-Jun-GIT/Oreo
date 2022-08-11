@@ -103,12 +103,9 @@ def image_to_base64(image_cv2):
 # 改用正则表达式让这个功能更好玩，无需命令前缀，无视大小写
 # @sv.on_rex(r"(?i)^((奥|利|o|re)+)?$")
 # 下面这个加入了奥=a，利=l（也就是拼音首字母），按需开启，函数内正则表达式已支持识别无需改动
-@sv.on_rex(r"(?i)^((奥|利|o|re|a|l)+)?$")
+@sv.on_rex(r"(?i)^draw((奥|利|o|re|a|l)+)?$")
 async def draworeo(bot, ev):
     name = ev.raw_message.strip()
-    if re.match(r"\[CQ:", name):
-        print("是cq码，结束……")
-        return
     # 预处理
     if re.match(r"(?i)[奥o]", name[-1]):
         img4 = img3.copy()
@@ -118,6 +115,8 @@ async def draworeo(bot, ev):
     # 实际影响仅在第一二层，因为后续层e是无法完成正则识别的
     # 尽管如此，去除e更简单粗暴
     name = name.replace("e", "")
+    # 去除标识符
+    name = name.replace("draw", "")
 
     # 对除去顶层以外的部分进行叠图（因为顶层有可能要叠上半饼，所以后续拉出来单独处理）
     for i in range(0, len(name) - 2):

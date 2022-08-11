@@ -24,20 +24,9 @@ git clone https://github.com/C-Jun-GIT/Oreo.git
 
 指令为(例)：
 ```
-奥(o)利(re)奥(o)……
+draw奥(o)利(re)奥(o)……
 ```
-后面可以为奥（o）和利（re）任意的排列组合。
-
-<details>
-<summary>旧版命令，已弃用</summary>
-
-指令为(例)：
-```
-draw奥利奥
-```
-draw后面可以为奥和利任意的排列组合。
-
-</details>
+draw后面可以为奥(o)和利(re)任意的排列组合。
 
 ## 效果演示:
 ![效果演示](https://github.com/C-Jun-GIT/Oreo/blob/main/%E5%A5%A5%E5%88%A9%E5%A5%A5%E7%A4%BA%E4%BE%8B.png)
