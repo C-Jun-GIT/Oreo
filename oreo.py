@@ -105,7 +105,7 @@ def image_to_base64(image_cv2):
 # 下面这个加入了奥=a，利=l（也就是拼音首字母），按需开启，函数内正则表达式已支持识别无需改动
 @sv.on_rex(r"(?i)^((奥|利|o|re|a|l)+)?$")
 async def draworeo(bot, ev):
-    name = ev.message.extract_plain_text().strip()
+    name = ev.raw_message.strip()
     if re.match(r"\[CQ:image,file", name):
         print("是图片，结束……")
         return
