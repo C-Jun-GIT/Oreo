@@ -106,6 +106,9 @@ def image_to_base64(image_cv2):
 @sv.on_rex(r"(?i)^((奥|利|o|re|a|l)+)?$")
 async def draworeo(bot, ev):
     name = ev.message.extract_plain_text().strip()
+    if re.match(r"\[CQ:image,file", name):
+        print("是图片，结束……")
+        return
     # 预处理
     if re.match(r"(?i)[奥o]", name[-1]):
         img4 = img3.copy()
