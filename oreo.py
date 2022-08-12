@@ -139,20 +139,29 @@ async def draworeo(bot, ev):
             img4 = png_extend(img4, 64)
             img4 = add_b(img4)
 
-    # 对顶层单独处理
-    first = name[0]
-    last = name[1]
-    if re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[利rl]", last):
-        img4 = png_extend(img4, 84)
-        img4 = add_t(img4)
-    elif re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[奥oa]", last):
-        img4 = png_extend(img4, 64)
-        img4 = add_t(img4)
-    elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[奥oa]", last):
-        imgt = png_extend(img4, 40)
-        img4 = add_re(imgt)
-    elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[利rl]", last):
-        img4 = png_extend(img4, 60)
-        img4 = add_re(img4)
+    if len(name) > 1:
+        # 对顶层单独处理
+        first = name[0]
+        last = name[1]
+        if re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[利rl]", last):
+            img4 = png_extend(img4, 84)
+            img4 = add_t(img4)
+        elif re.match(r"(?i)[奥oa]", first) and re.match(r"(?i)[奥oa]", last):
+            img4 = png_extend(img4, 64)
+            img4 = add_t(img4)
+        elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[奥oa]", last):
+            imgt = png_extend(img4, 40)
+            img4 = add_re(imgt)
+        elif re.match(r"(?i)[利rl]", first) and re.match(r"(?i)[利rl]", last):
+            img4 = png_extend(img4, 60)
+            img4 = add_re(img4)
+
+    # 如果只有一层
+    if len(name) == 1:
+        top = name[0]
+        if re.match(r"(?i)[奥oa]", top):
+            img4 = img1.copy()
+        elif re.match(r"(?i)[利rl]", top):
+            img4 = img2.copy()
 
     await bot.send(ev, MessageSegment.image(image_to_base64(img4)))
